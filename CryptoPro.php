@@ -14,7 +14,7 @@ class CryptoPro {
      * @param string $sHash
      * @return bool|string
      */
-    public function createSign(string $sContent, string$sHash)
+    public function createSign(string $sContent, string $sHash, bool $bEncodeBase64 = true)
     {
         try
         {
@@ -29,12 +29,11 @@ class CryptoPro {
             $oSigner->set_Options(CERTIFICATE_INCLUDE_WHOLE_CHAIN);
 
             $oSignedData = new CPSignedData();
-            $oSignedData->set_ContentEncoding(BASE64_TO_BINARY);
+            if ($bEncodeBase64) {
+                $oSignedData->set_ContentEncoding(BASE64_TO_BINARY);
+            }
             $oSignedData->set_Content($sContent);
             $sSignature = $oSignedData->SignCades($oSigner, 1, false, 0);
-            //$sSignature = $oSignedData->Sign($oSigner, 0, ENCODE_BASE64);
-            //$sSignature = $oSignedData->Sign($oSigner, 0, STRING_TO_UCS2LE);
-            //$oSignedData->Verify($sSignature, 0, VERIFY_SIGNATURE_ONLY);
             return $sSignature;
         }
         catch (Exception $e)
